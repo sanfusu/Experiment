@@ -1,42 +1,68 @@
+/**
+ * @brief   通用链表数据结构
+ * @author  sanfusu@foxmail.com
+ * @update  2019-03-08 17:50:25
+ */
+
 #include "list.h"
-
-void(double_list_add_prev)(double_list_header_t current_header, double_list_header_t new_header)
-{
-    double_list_add_prev(current_header, new_header);
-}
-
-void(double_list_add_next)(double_list_header_t current_header, double_list_header_t new_header)
-{
-    double_list_add_next(current_header, new_header);
-}
-
-#ifdef MODULE_TEST_LIST_C
-
-#include <stdio.h>
-typedef struct Node
-{
-    double_list_header(header);
-    int num;
-} Node_t;
-
-int main()
-{
+#ifdef __DEBUG
+#undef single_single_list_header
+#undef single_list_next
+#undef single_list_add_next
+#undef single_list_delete
+#undef single_list_delete_next
+#undef double_single_list_header
+#undef double_list_next
+#undef double_list_prev
+#undef double_list_add
 #undef double_list_add_next
-    Node_t node[10];
-    Node_t *c_node = node;
-    node[0].header[0] = node[0].header[1] = NULL;
-    for (int i = 0; i < 9; i++)
-    {
-        node[i].num = i;
-        node[i + 1].num = i + 1;
-        double_list_add_next(node[i].header, node[i + 1].header);
-    }
+#undef double_list_add_prev
+#undef double_list_delete
+#endif
 
-    for (int i = 0; i < 10; i++)
+single_list_header_t(single_list_next)(single_list_header_t current_header)
+{
+    single_list_header_t ret = (single_list_header_t)current_header[0];
+    return ret;
+}
+
+void(single_list_add_next)(single_list_header_t current_header, single_list_header_t next_header)
+{
+    current_header[0] = (single_list_header_ptr_t)next_header;
+}
+
+void(single_list_delete_next)(single_list_header_t current_header)
+{
+    single_list_header_t nnext_header = single_list_next(single_list_next(current_header));
+    single_list_add_next(current_header, nnext_header);
+}
+
+double_single_list_header_t(double_list_next)(double_single_list_header_t current_header)
+{
+    double_single_list_header_t ret = (double_single_list_header_t)current_header[_double_next];
+    return ret;
+}
+
+double_single_list_header_t(double_list_prev)(double_single_list_header_t current_header)
+{
+    double_single_list_header_t ret = (double_single_list_header_t)current_header[_double_prev];
+    return ret;
+}
+
+void(double_list_add)(double_single_list_header_t current_header, double_single_list_header_t new_header, unsigned pn)
+{
+
+    single_list_add_next((single_list_header_t)(&new_header[!pn]), (single_list_header_t)current_header);
+    single_list_add_next((single_list_header_t)(&new_header[pn]),
+                         (single_list_header_t)single_list_next((single_list_header_t)(&current_header[pn])));
+    single_list_add_next((single_list_header_t)(&current_header[pn]), (single_list_header_t)new_header);
+    if (single_list_next((single_list_header_t)(&new_header[pn])) != NULL)
     {
-        printf("%d ", c_node->num);
-        c_node = (Node_t *)double_list_next(c_node->header);
+        single_list_add_next(single_list_next((single_list_header_t)(&new_header[pn])), new_header);
     }
 }
 
-#endif
+void(double_list_delete)(double_single_list_header_t current_header)
+{
+    double_list_add_next(double_list_prev(current_header), double_list_next(current_header));
+}
