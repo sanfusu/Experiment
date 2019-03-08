@@ -39,11 +39,11 @@ typedef single_list_header_ptr_t *single_list_header_t;
 #define _double_prev 1
 #define _double_next 0
 
-typedef void **double_single_list_header_ptr_t;
-typedef double_single_list_header_ptr_t *double_single_list_header_t;
-#define double_single_list_header(name) double_single_list_header_ptr_t name[2]
-#define double_list_next(current_header) ((double_single_list_header_t)(current_header)[_double_next])
-#define double_list_prev(current_header) ((double_single_list_header_t)(current_header)[_double_prev])
+typedef void **double_list_header_ptr_t;
+typedef double_list_header_ptr_t *double_list_header_t;
+#define double_list_header(name) double_list_header_ptr_t name[2]
+#define double_list_next(current_header) ((double_list_header_t)(current_header)[_double_next])
+#define double_list_prev(current_header) ((double_list_header_t)(current_header)[_double_prev])
 
 #define double_list_add(current_header, new_header, pn)                                                            \
     {                                                                                                              \

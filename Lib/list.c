@@ -37,19 +37,19 @@ void(single_list_delete_next)(single_list_header_t current_header)
     single_list_add_next(current_header, nnext_header);
 }
 
-double_single_list_header_t(double_list_next)(double_single_list_header_t current_header)
+double_list_header_t(double_list_next)(double_list_header_t current_header)
 {
-    double_single_list_header_t ret = (double_single_list_header_t)current_header[_double_next];
+    double_list_header_t ret = (double_list_header_t)current_header[_double_next];
     return ret;
 }
 
-double_single_list_header_t(double_list_prev)(double_single_list_header_t current_header)
+double_list_header_t(double_list_prev)(double_list_header_t current_header)
 {
-    double_single_list_header_t ret = (double_single_list_header_t)current_header[_double_prev];
+    double_list_header_t ret = (double_list_header_t)current_header[_double_prev];
     return ret;
 }
 
-void(double_list_add)(double_single_list_header_t current_header, double_single_list_header_t new_header, unsigned pn)
+void(double_list_add)(double_list_header_t current_header, double_list_header_t new_header, unsigned pn)
 {
 
     single_list_add_next((single_list_header_t)(&new_header[!pn]), (single_list_header_t)current_header);
@@ -62,7 +62,7 @@ void(double_list_add)(double_single_list_header_t current_header, double_single_
     }
 }
 
-void(double_list_delete)(double_single_list_header_t current_header)
+void(double_list_delete)(double_list_header_t current_header)
 {
     double_list_add_next(double_list_prev(current_header), double_list_next(current_header));
 }
