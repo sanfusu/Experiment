@@ -4,6 +4,9 @@
 # @platform: linux
 # @author: sanfusu@foxmail.com
 
+# usage:
+# python3 check_invalid_symlink.py path_to_check
+
 import os
 import sys
 
