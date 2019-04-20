@@ -3,6 +3,8 @@
 *.out
 *.gch
 *.i
+*~
 
 test*
 TMP/
+
