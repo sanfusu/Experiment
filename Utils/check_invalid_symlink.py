@@ -6,30 +6,26 @@
 
 # usage:
 # python3 check_invalid_symlink.py path_to_check
+#
 
 import os
 import sys
+import argparse
+from pathlib import Path
 
-# 默认在当前目录查找
-ROOT = './'
+parser = argparse.ArgumentParser(description='扫描指定目录下所有的无效符号连接（软链接）')
+parser.add_argument('PATH_LIST', nargs='*', default=['./'], type=Path)
 
+args = parser.parse_args()
 
 def justify_symlink(full_path):
-    if os.path.islink(full_path):
-        parent_path = os.path.dirname(full_path)
-        link_path = os.readlink(full_path)
-        if os.access(os.path.join(parent_path, link_path), os.F_OK) == False:
-            print("\033[1;31;40m {0} \033[0m".format(full_path))
+    if os.path.exists(full_path) == False:
+        print("\033[1;31;40m {0} \033[0m".format(full_path))
 
-
-for arg in sys.argv[0:]:
+for arg in args.PATH_LIST:
     if os.path.isdir(arg):
-        ROOT = arg
-    for dirpath, dirnames, filenames in os.walk(ROOT,):
-        for dirname in dirnames:
-            justify_symlink(os.path.join(dirpath, dirname))
-        for filename in filenames:
-            justify_symlink(os.path.join(dirpath, filename))
-
-# else:
-#     print("\033[1;31m ERROR:\033[0m {0} is not a path".format(arg))
+        for dirpath, dirnames, filenames in os.walk(arg):
+            for dirname in dirnames:
+                justify_symlink(os.path.join(dirpath, dirname))
+            for filename in filenames:
+                justify_symlink(os.path.join(dirpath, filename))
